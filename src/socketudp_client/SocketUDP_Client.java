@@ -49,6 +49,7 @@ public class SocketUDP_Client {
             //Conversion de array a string separado por comas
             String str = Arrays.toString(binario)          
             .replace(",", "")  //remove the commas
+            .replace(" ", "")  //remove blank spaces
             .replace("[", "")  //remove the right bracket
             .replace("]", "")  //remove the left bracket
             .trim();    
