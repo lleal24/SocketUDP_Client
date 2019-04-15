@@ -15,7 +15,6 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 
 /**
  *
@@ -30,11 +29,15 @@ public class vistaMagia extends javax.swing.JFrame {
     int clave = 0;
     int[] binario = new int[7];
     String mensaje = "";
+    boolean bnd = true;
     final String Carta = "/img/Carta";
+    byte[] buffer = new byte[1024];
+    String numPensado;
     //String cadena = "";
 
     public vistaMagia() {
         initComponents();
+        setTitle("Truco magia adivinar numero de 1 a 100");
         jButton1.setEnabled(false);
         jButton2.setEnabled(false);
     }
@@ -43,32 +46,45 @@ public class vistaMagia extends javax.swing.JFrame {
 
         try {
             DatagramSocket miSocket = new DatagramSocket();
-            InetAddress host = InetAddress.getByName("127.0.0.1");
+
+            InetAddress host = InetAddress.getByName("192.168.56.1"); //127.0.0.1
             int puerto = 9107;
             String cadena = "";
-
+           
             if (contador >= 1 && contador <= 7) {
+
                 if (opc) {
                     cadena = "1";
 
                 } else {
                     cadena = "0";
                 }
-                if (contador == 7) {
-                    JOptionPane.showMessageDialog(rootPane, "Fin del juego");
+                 if (contador == 7) {
+                     /*                 
+                     DatagramPacket respServer = new DatagramPacket(buffer, buffer.length);
+                     //miSocket.receive(respServer);
+                     String cadena2 = new String(respServer.getData(), 0, respServer.getLength());
+                     */
+                     JOptionPane.showMessageDialog(rootPane, "Fin de juego numero pensado:\n" + numPensado);
+                     //JOptionPane.showMessageDialog(rootPane, "El numero que pensaste es: ");
+                     
                     contador = 6;
+
                 }
+
                 contador = contador + 1;
-                jLabel1.setText("Ficha " + contador);
+                jLabel1.setText("           " + "Ficha " + contador);
                 jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource(Carta + contador + ".png")));
 
+                byte[] mensaje = cadena.getBytes();
+
+                //Se arma el paquete a enviar que contiene mensaje host y puerto
+                DatagramPacket miPaquete = new DatagramPacket(mensaje, cadena.length(), host, puerto);
+                miSocket.send(miPaquete);
+                
+                
+
             }
-
-            byte[] mensaje = cadena.getBytes();
-
-            //Se arma el paquete a enviar que contiene mensaje host y puerto
-            DatagramPacket miPaquete = new DatagramPacket(mensaje, cadena.length(), host, puerto);
-            miSocket.send(miPaquete);
 
         } catch (SocketException ex) {
             Logger.getLogger(vistaMagia.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,30 +94,6 @@ public class vistaMagia extends javax.swing.JFrame {
             Logger.getLogger(vistaMagia.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        /*
-         if(contador>=1 && contador <=7){
-         if(opc){
-         cadena = "1"; 
-         System.out.println("1");
-         }else{
-         cadena = "1";
-         System.out.println("0");
-               
-         }                                    
-               
-         } 
-                
-         if(contador == 7){
-         JOptionPane.showInputDialog("Finalizacion");
-         for(int i = 0; i<binario.length;i++){
-         System.out.println(binario[i]);  
-         }
-                
-         contador = 6;
-         }
-         contador = contador +1;
-            
-         */
     }
 
     /**
@@ -127,7 +119,6 @@ public class vistaMagia extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel1.setText("             Ficha");
         jLabel1.setToolTipText("");
         jLabel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -140,7 +131,7 @@ public class vistaMagia extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(229, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(210, 210, 210))
         );
@@ -200,7 +191,7 @@ public class vistaMagia extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("INICIAR");
+        jButton4.setText("Iniciar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -214,7 +205,7 @@ public class vistaMagia extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(142, 142, 142)
                 .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addGap(140, 140, 140))
         );
@@ -235,9 +226,9 @@ public class vistaMagia extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -248,7 +239,7 @@ public class vistaMagia extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -256,18 +247,37 @@ public class vistaMagia extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // Boton Iniciar               
-        jButton1.setEnabled(true);
-        jButton2.setEnabled(true);
-        JOptionPane.showMessageDialog(rootPane, "Inicio del Truco\n"
-                + "\nPiensa en numero del 1 al 100\n"
-                + "a continuacion se mostrarà una serie de tarjetas\n"
-                + "selecciona SI si el numero esta en la tarjeta\n"
-                + "de lo contrario selecciona NO.\n"
-                + "\nAl final veremos si adiviamos el numero que pensaste..."
-        );
-        jLabel1.setText("Ficha " + contador);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource(Carta + contador + ".png")));
+        // Boton Iniciar
+        if (bnd) {
+            jButton1.setEnabled(true);
+            jButton2.setEnabled(true);
+            JOptionPane.showMessageDialog(rootPane, "Inicio del Truco\n"
+                    + "\nPiensa en numero del 1 al 100\n"
+                    + "a continuacion se mostrarà una serie de tarjetas\n"
+                    + "selecciona SI si el numero esta en la tarjeta\n"
+                    + "de lo contrario selecciona NO.\n"
+                    + "\nAl final veremos si adiviamos el numero que pensaste..."
+            );
+            numPensado = JOptionPane.showInputDialog(rootPane, "Piensa en un numero e ingresalo");
+            jLabel1.setText("             Ficha " + contador);
+            jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource(Carta + contador + ".png")));
+            jButton4.setText("Reiniciar");
+            bnd = false;
+
+        } else {
+            int seleccion = JOptionPane.showOptionDialog(this, "¿Quieres Salir Reinicar El Juego? Recuerda reiniciar el server",
+                    "Salir", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Si", "No"}, "Si");
+            if (seleccion != -1) {
+                if ((seleccion + 1) == 1) {
+                    this.dispose();
+                    vistaMagia vista = new vistaMagia();
+                    vista.setVisible(true);
+                } else {
+                }
+            }
+        }
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -282,6 +292,8 @@ public class vistaMagia extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Boton Cancelar
+        JOptionPane.showMessageDialog(rootPane, "Regresa cuando quieras :)", "Adios", WIDTH, null);
+        System.exit(0);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
