@@ -53,7 +53,7 @@ public class vistaMagia extends javax.swing.JFrame {
             DatagramSocket miSocket = new DatagramSocket();
 
             //@host variable que define la direccion ip del servidor
-            InetAddress host = InetAddress.getByName("192.168.56.1"); //127.0.0.1
+            InetAddress host = InetAddress.getByName("192.164.55.1"); //127.0.0.1
             //@puerto variable que define el puerto de destino en el servidor
             int puerto = 9107;
             //@cadena, variable tipo string que 
