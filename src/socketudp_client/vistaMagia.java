@@ -35,22 +35,31 @@ public class vistaMagia extends javax.swing.JFrame {
     String numPensado;
     //String cadena = "";
 
+    //Metodo de vista que inicializa los componenetes 
     public vistaMagia() {
         initComponents();
         setTitle("Truco magia adivinar numero de 1 a 100");
         jButton1.setEnabled(false);
         jButton2.setEnabled(false);
     }
-
+    //Metodo que muestra las tarjetas, tiene como parametro de entrada un dato tipo boolenao
+    //dado por la seleccion del boton si o no
     public void muestraTarjeta(boolean opc) {
-
+        
+        
+        //bloque de codigo try que realiza la creacion del socket y conexion con el servidor
         try {
+            //@miScoket, creacion de objeto miSocket tipo socket 
             DatagramSocket miSocket = new DatagramSocket();
 
+            //@host variable que define la direccion ip del servidor
             InetAddress host = InetAddress.getByName("192.168.56.1"); //127.0.0.1
+            //@puerto variable que define el puerto de destino en el servidor
             int puerto = 9107;
+            //@cadena, variable tipo string que 
             String cadena = "";
-           
+            
+           //@condicional que ejecutara 7 veces 
             if (contador >= 1 && contador <= 7) {
 
                 if (opc) {
